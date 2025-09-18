@@ -2,23 +2,11 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AgentURN · Domain-scoped URN Rules</title>
 <style>
-body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial;max-width:980px;margin:40px auto;padding:0 16px;line-height:1.6}
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial;max-width:960px;margin:40px auto;padding:0 16px;line-height:1.6}
 code,pre{background:#f6f8fa;border-radius:6px;padding:2px 6px}pre{padding:12px;overflow:auto}
 table{border-collapse:collapse;width:100%}th,td{border:1px solid #e5e7eb;padding:8px;text-align:left}
 .footer{margin-top:40px;padding-top:12px;border-top:1px solid #eee;color:#666;font-size:14px}
-.langbar{display:flex;gap:8px;align-items:center;justify-content:flex-end;margin-bottom:10px}
-.langbar button{border:1px solid #ddd;background:#fff;padding:4px 10px;border-radius:6px;cursor:pointer}
-.langbar button.active{background:#111;color:#fff;border-color:#111}
-[data-lang]{display:none}
-.lang-en [data-lang="en"]{display:block}
-.lang-zh [data-lang="zh"]{display:block}
-</style></head><body class="lang-en">
-<div class="langbar">
-  <span>Language:</span>
-  <button id="btn-en">EN</button>
-  <button id="btn-zh">中文</button>
-</div>
-<div data-lang="en">
+</style></head><body>
 
 <h1>AgentURN — naming rules (bridge, not a global root)</h1>
 <p><strong>Structure</strong>: <code>urn:agent:{skill|intent}:{owner-domain}:{name}.v{n}</code></p>
@@ -33,41 +21,6 @@ urn:agent:intent:shop.example:invoice.create.v2 ->  https://shop.example/api/v2/
 <ul><li>Generic terms: keep under your domain, don’t claim global names.</li>
 <li>Avoid conflicts: verify domain ownership; back-reference from AI Manifest.</li>
 <li>Relation to WebFinger/DNS: complementary; use WebFinger/DNS‑SD as hints.</li></ul>
-</div>
-<div data-lang="zh">
-
-<h1>AgentURN — 命名规则（不做“通用根”，做桥接参考）</h1>
-<p><strong>结构</strong>：<code>urn:agent:{skill|intent}:{owner-domain}:{name}.v{n}</code></p>
-<h2>规则</h2>
-<ul><li>域名作用域保证唯一性（你控制的 <code>{owner-domain}</code>）。</li>
-<li>版本化：<code>.v{n}</code> 表示主版本；破坏性更新才 +1。</li>
-<li>可委派：允许子域承载子命名空间。</li></ul>
-<h2>示例</h2>
-<pre><code>urn:agent:skill:example.com:vector.upsert.v1  ->  https://api.example.com/v1/vector:upsert
-urn:agent:intent:shop.example:invoice.create.v2 ->  https://shop.example/api/v2/invoice</code></pre>
-<h2>FAQ</h2>
-<ul><li>通用词：放在自有域名下，不抢顶级通用名。</li>
-<li>避免冲突：校验域名所有权；在 AI Manifest 中回指 URN。</li>
-<li>与 WebFinger/DNS：互补；可用 WebFinger/DNS‑SD 作提示。</li></ul>
-</div>
 <div class="footer"><p>Last updated: <span id="d"></span></p></div>
-<script>
-(function(){
-  const LS='ai-lang';
-  const pref = localStorage.getItem(LS);
-  let lang = pref || 'en' || ((navigator.language||'en').toLowerCase().startsWith('zh')?'zh':'en');
-  set(lang);
-  document.getElementById('btn-en').onclick=()=>set('en');
-  document.getElementById('btn-zh').onclick=()=>set('zh');
-  function set(l){
-    document.body.classList.remove('lang-en','lang-zh');
-    document.body.classList.add('lang-'+l);
-    document.documentElement.lang = (l==='zh'?'zh-CN':'en');
-    localStorage.setItem(LS,l);
-    document.getElementById('btn-en').classList.toggle('active', l==='en');
-    document.getElementById('btn-zh').classList.toggle('active', l==='zh');
-  }
-  document.getElementById('d').textContent=new Date().toISOString().slice(0,10);
-})();
-</script>
+<script>document.getElementById('d').textContent=new Date().toISOString().slice(0,10);</script>
 </body></html>
